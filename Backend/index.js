@@ -1,5 +1,7 @@
 const express = require("express");
 const cors = require("cors");
+require("dotenv").config();
+const { connectPostgresDB } = require("./DBConnecter/connectToPostgres");
 const app = express();
 
 app.get("/check", (req, res) => {

@@ -1,11 +1,12 @@
-import { PrismaClient } from "@prisma/client";
-export const prismaClient = new PrismaClient();
+const { PrismaClient } = require("@prisma/client");
+const prismaClient = new PrismaClient();
 
-export const connectPostgresDB = async () => {
+exports.prismaClient = prismaClient;
+
+const connectPostgresDB = async () => {
   try {
     const client = new Client({
-      connectionString:
-        "postgresql://postgres://avnadmin:AVNS_ntcX8_Zuk7k2dERJFSc@pg-377e36b8-activity-tracker.c.aivencloud.com:26005/defaultdb?sslmode=require",
+      connectionString: process.env.AIVEN_DB_URL,
     });
     await client.connect();
     console.log(" client is conencted ");
@@ -34,3 +35,5 @@ export const connectPostgresDB = async () => {
     console.log(" error is there", error);
   }
 };
+
+module.exports = { connectPostgresDB };
