@@ -1,13 +1,62 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
+import React from "react";
+import ReactDOM from "react-dom/client";
+import "./index.css";
+import App from "./App";
+import reportWebVitals from "./reportWebVitals";
+import { RouterProvider, createBrowserRouter } from "react-router-dom";
+import Signup from "Routes/Signup";
+import ErrorPage from "Routes/ErrorPage";
+import BlockView from "./components/BlockView";
+import Login from "./Routes/Login";
+import MainPage from "Routes/MainPage";
+import CarsPage from "Routes/CarsPage";
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
+const appRouter = createBrowserRouter([
+  {
+    path: "/",
+    element: <App />,
+    errorElement: <ErrorPage />,
+    children: [
+      {
+        path: "/",
+        element: (
+          <BlockView>
+            <MainPage />
+          </BlockView>
+        ),
+      },
+      {
+        path: "/signup",
+        element: (
+          <BlockView>
+            <Signup />
+          </BlockView>
+        ),
+      },
+      {
+        path: "/login",
+        element: (
+          <BlockView>
+            <Login />
+          </BlockView>
+        ),
+      },
+      {
+        path: "/cars",
+        element: (
+          <BlockView>
+            <CarsPage />
+          </BlockView>
+        ),
+      },
+    ],
+  },
+]);
+
+const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
-    <App />
+    <RouterProvider router={appRouter}></RouterProvider>
   </React.StrictMode>
 );
 
