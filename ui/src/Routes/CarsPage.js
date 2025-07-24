@@ -1,14 +1,25 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { useAuth } from "components/AuthProvider";
+import { useNavigate } from "react-router-dom";
 
 export default function CarsPage() {
   const [cars, setCars] = useState([]);
   const [error, setError] = useState(null);
+  const navigate = useNavigate();
+  const { token } = useAuth();
   useEffect(() => {
     axios
-      .get("http://localhost:4141/api/getAllCars")
-      .then((res) => setCars(res.data))
-      .catch((err) => setError(err.message));
+      .get(`${process.env.REACT_APP_API_URL}/cars/getAllCars`, {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+      .then((res) => setCars(res.data.data))
+      .catch((err) => {
+        if (err && err.response.status === 403) {
+          navigate("/login", { state: { path: "/cars" } });
+        }
+        setError(err.message);
+      });
   }, []);
 
   return (

@@ -10,11 +10,18 @@ import BlockView from "./components/BlockView";
 import Login from "./Routes/Login";
 import MainPage from "Routes/MainPage";
 import CarsPage from "Routes/CarsPage";
+import AllBookingsPage from "Routes/AllBookingsPage";
+import { AuthProvider } from "components/AuthProvider";
+import Logout from "Routes/Logout";
 
 const appRouter = createBrowserRouter([
   {
     path: "/",
-    element: <App />,
+    element: (
+      <AuthProvider>
+        <App />
+      </AuthProvider>
+    ),
     errorElement: <ErrorPage />,
     children: [
       {
@@ -46,6 +53,22 @@ const appRouter = createBrowserRouter([
         element: (
           <BlockView>
             <CarsPage />
+          </BlockView>
+        ),
+      },
+      {
+        path: "/bookings",
+        element: (
+          <BlockView>
+            <AllBookingsPage />
+          </BlockView>
+        ),
+      },
+      {
+        path: "/logout",
+        element: (
+          <BlockView>
+            <Logout />
           </BlockView>
         ),
       },

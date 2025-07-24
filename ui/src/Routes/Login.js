@@ -1,13 +1,32 @@
-import React, { Fragment, useEffect, useState } from "react";
+import React, { Fragment, useState } from "react";
+import axios from "axios";
+import { useAuth } from "components/AuthProvider";
+import ValidationError from "components/ValidationError";
+import { useLocation } from "react-router-dom";
 
 const Login = () => {
-  const [ResetPasswordFormActive, setResetPasswordFormActive] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  //   const dispatch = useDispatch();
+  const [validationErrorText, setValidationErrorText] = useState(null);
+  const location = useLocation();
 
-  const handleSubmit = () => {
-    // dispatch(updateUser(email));
+  const { login } = useAuth();
+
+  const handleSubmit = async () => {
+    try {
+      const res = await axios.post(
+        `${process.env.REACT_APP_API_URL}/auth/login`,
+        { email, password }
+      );
+      console.log(" coming here", res.data.data.userId);
+      login(res.data.data.token, location, res.data.data.userId);
+    } catch (err) {
+      if (err && err.response && err.response?.data?.data) {
+        setValidationErrorText(err.response?.data?.data);
+      } else {
+        alert(err.response?.data?.error || "Login failed");
+      }
+    }
   };
 
   return (
@@ -20,6 +39,9 @@ const Login = () => {
         <ResetPassword />
       ) : ( */}
       <Fragment>
+        {validationErrorText && (
+          <ValidationError validationErrorText={validationErrorText} />
+        )}
         <input
           type="text"
           name="email"
@@ -36,12 +58,6 @@ const Login = () => {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
-        <button
-          className={"m-2 underline"}
-          onClick={() => setResetPasswordFormActive(true)}
-        >
-          Forgot Password ?
-        </button>
         <button className={"border"} onClick={handleSubmit}>
           Submit
         </button>

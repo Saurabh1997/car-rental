@@ -1,10 +1,13 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { Link } from "react-router-dom";
 
 export default function Navbar({ options }) {
-  const nav_menu = options.map((menu) => {
+  const nav_menu = options.map((menu, index) => {
     return (
-      <li key={menu?.displayName} className={`text-xl font-bold text-center`}>
+      <li
+        key={`${menu?.displayName}-${index}`}
+        className={`text-xl font-bold text-center`}
+      >
         <Link to={`${menu?.path}`}>{menu?.displayName}</Link>
       </li>
     );
